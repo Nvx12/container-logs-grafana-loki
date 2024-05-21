@@ -58,12 +58,8 @@ In Grafana, add Loki as a data source
 Create dashboards and panels to visualize your logs.
 ## Cleanup
 To stop and remove all the services, run:
-
-## Copy code
 docker-compose down
-To remove all the associated volumes:
-
-Copy code
+## To remove all the associated volumes:
 docker-compose down -v
 Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements.
