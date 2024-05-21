@@ -1,15 +1,17 @@
 version: '3.9'
 
-name: graf-logstack
-
 services:
   grafana:
     image: grafana/grafana:10.0.3
-    container_name: grafana
     ports:
-      - 3000:3000
+      - target: 3000
+        published: 3000
+        protocol: tcp
+        mode: host
     volumes:
-      - ./config/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - type: bind
+        source: ./grafana-datasources.yml
+        target: /etc/grafana/provisioning/datasources/datasources.yml
       - grafana-data:/var/lib/grafana
     environment:
       - GF_DEFAULT_APP_MODE=development
@@ -19,23 +21,32 @@ services:
 
   loki:
     image: grafana/loki:2.8.4
-    container_name: loki
     ports:
-      - 3100:3100
+      - target: 3100
+        published: 3100
+        protocol: tcp
+        mode: host
     volumes:
       - loki-data:/loki
-      - ./config/loki-config.yml:/etc/loki/local-config.yml
+      - type: bind
+        source: ./loki-config.yml
+        target: /etc/loki/local-config.yml
     command: -config.file=/etc/loki/local-config.yml
     networks:
       - graf-net
 
   promtail:
     image:  grafana/promtail:2.8.4
-    container_name: promtail
     volumes:
-      - ./config/docker-config.yml:/etc/promtail/docker-config.yml
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock
+      - type: bind
+        source: ./docker-config.yml
+        target: /etc/promtail/docker-config.yml
+      - type: bind
+        source: /var/lib/docker/containers
+        target: /var/lib/docker/containers
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
     command: -config.file=/etc/promtail/docker-config.yml
     depends_on:
       - loki
@@ -48,4 +59,3 @@ volumes:
 
 networks:
   graf-net:
-    name: graf-net
