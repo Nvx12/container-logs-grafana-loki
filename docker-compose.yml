@@ -1,0 +1,51 @@
+version: '3.9'
+
+name: graf-logstack
+
+services:
+  grafana:
+    image: grafana/grafana:10.0.3
+    container_name: grafana
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_DEFAULT_APP_MODE=development
+      - GF_LOG_LEVEL=debug
+    networks:
+      - graf-net
+
+  loki:
+    image: grafana/loki:2.8.4
+    container_name: loki
+    ports:
+      - 3100:3100
+    volumes:
+      - loki-data:/loki
+      - ./loki-config.yml:/etc/loki/local-config.yml
+    command: -config.file=/etc/loki/local-config.yml
+    networks:
+      - graf-net
+
+  promtail:
+    image:  grafana/promtail:2.8.4
+    container_name: promtail
+    volumes:
+      - ./docker-config.yml:/etc/promtail/docker-config.yml
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: -config.file=/etc/promtail/docker-config.yml
+    depends_on:
+      - loki
+    networks:
+      - graf-net
+      
+volumes:
+  loki-data:
+  grafana-data:
+
+networks:
+  graf-net:
+    name: graf-net
