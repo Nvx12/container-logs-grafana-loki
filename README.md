@@ -61,5 +61,5 @@ To stop and remove all the services, run:
 docker-compose down
 ## To remove all the associated volumes:
 docker-compose down -v
-Contributing
+## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements.
