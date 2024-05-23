@@ -18,6 +18,13 @@ services:
       - GF_LOG_LEVEL=debug
     networks:
       - tun_prod
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   loki:
     image: grafana/loki:2.8.4
@@ -34,9 +41,16 @@ services:
     command: -config.file=/etc/loki/local-config.yml
     networks:
       - tun_prod
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
   promtail:
-    image:  grafana/promtail:2.8.4
+    image: grafana/promtail:2.8.4
     volumes:
       - type: bind
         source: ./config/docker-config.yml
@@ -52,10 +66,83 @@ services:
       - loki
     networks:
       - tun_prod
-      
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - prom_data:/prometheus
+      - type: bind
+        source: ./config/prometheus.yml
+        target: /etc/prometheus/prometheus.yml
+    configs:
+      - source: prometheus_config
+        target: /etc/prometheus/prometheus.yml
+    networks:
+      - tun_prod
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    ports:
+      - "9100:9100"
+    networks:
+      - tun_prod
+    deploy:
+      mode: global
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+
+  cadvisor:
+    image: google/cadvisor:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - tun_prod
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
 volumes:
   loki-data:
+    driver: local
   grafana-data:
+    driver: local
+  prom_data:
+    driver: local
+
+configs:
+  prometheus_config:
+    file: ./config/prometheus.yml
 
 networks:
   tun_prod:
