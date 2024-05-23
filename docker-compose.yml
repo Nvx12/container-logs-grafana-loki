@@ -10,7 +10,7 @@ services:
         mode: host
     volumes:
       - type: bind
-        source: ./grafana-datasources.yml
+        source: ./config/grafana-datasources.yml
         target: /etc/grafana/provisioning/datasources/datasources.yml
       - grafana-data:/var/lib/grafana
     environment:
@@ -29,7 +29,7 @@ services:
     volumes:
       - loki-data:/loki
       - type: bind
-        source: ./loki-config.yml
+        source: ./config/loki-config.yml
         target: /etc/loki/local-config.yml
     command: -config.file=/etc/loki/local-config.yml
     networks:
@@ -39,7 +39,7 @@ services:
     image:  grafana/promtail:2.8.4
     volumes:
       - type: bind
-        source: ./docker-config.yml
+        source: ./config/docker-config.yml
         target: /etc/promtail/docker-config.yml
       - type: bind
         source: /var/lib/docker/containers
