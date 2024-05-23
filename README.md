@@ -56,10 +56,13 @@ Upon first login, you will be prompted to change the password.
 Logs from the containers will be collected by Promtail and sent to Loki.
 In Grafana, add Loki as a data source
 Create dashboards and panels to visualize your logs.
+<br/>
 ## Cleanup
 To stop and remove all the services, run:
 docker-compose down
+<br/>
 ## To remove all the associated volumes:
 docker-compose down -v
+<br/>
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements.
