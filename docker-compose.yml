@@ -17,7 +17,7 @@ services:
       - GF_DEFAULT_APP_MODE=development
       - GF_LOG_LEVEL=debug
     networks:
-      - graf-net
+      - tun_prod
 
   loki:
     image: grafana/loki:2.8.4
@@ -33,7 +33,7 @@ services:
         target: /etc/loki/local-config.yml
     command: -config.file=/etc/loki/local-config.yml
     networks:
-      - graf-net
+      - tun_prod
 
   promtail:
     image:  grafana/promtail:2.8.4
@@ -51,11 +51,12 @@ services:
     depends_on:
       - loki
     networks:
-      - graf-net
+      - tun_prod
       
 volumes:
   loki-data:
   grafana-data:
 
 networks:
-  graf-net:
+  tun_prod:
+    external: true
