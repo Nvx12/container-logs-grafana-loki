@@ -34,7 +34,7 @@ Grafana - Visualization tool for querying and displaying the logs.
 Setup
 1. Clone Repository
 Clone this repository to your local machine:
-git clone https://github.com/Nvx12/container-logs-grafana-loki.git
+git clone [https://github.com/Nvx12/container-logs-grafana-loki.git](https://github.com/First-Delivery-Group/container-logs-grafana-loki.git)
 <br/>
 cd docker-logging-grafana-loki
 <br/>
