@@ -19,6 +19,7 @@ services:
       - 'GF_SMTP_ENABLED=true'
       - 'GF_SMTP_HOST=firstdeliverygroup-com.mail.protection.outlook.com:25'
       - 'GF_SMTP_FROM_ADDRESS=grafana@firstdeliverygroup.com'
+      - 'GF_SERVER_ROOT_URL=https://monitoring.first-admin.com'
     networks:
       - tun_prod
     deploy:
