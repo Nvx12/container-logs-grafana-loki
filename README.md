@@ -41,10 +41,10 @@ cd docker-logging-grafana-loki
 2. Configure Docker
 Ensure that Docker and Docker Compose are properly configured and running on your system.
 <br/>
-3. Start Services
+3. Start/Update Services
 Use Docker Compose to start Loki, Promtail, and Grafana:
 <br/>
-docker-compose up -d
+docker stack deploy -c docker-compose.yml monitoring
 <br/>
 5. Access Grafana
 Open your browser and go to http://localhost:3000.
