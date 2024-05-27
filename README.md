@@ -34,17 +34,17 @@ Grafana - Visualization tool for querying and displaying the logs.
 Setup
 1. Clone Repository
 Clone this repository to your local machine:
-git clone https://github.com/Nvx12/container-logs-grafana-loki.git
+git clone https://github.com/First-Delivery-Group/container-logs-grafana-loki.git
 <br/>
 cd docker-logging-grafana-loki
 <br/>
 2. Configure Docker
 Ensure that Docker and Docker Compose are properly configured and running on your system.
 <br/>
-3. Start Services
+3. Start/Update Services
 Use Docker Compose to start Loki, Promtail, and Grafana:
 <br/>
-docker-compose up -d
+docker stack deploy -c docker-compose.yml monitoring
 <br/>
 5. Access Grafana
 Open your browser and go to http://localhost:3000.
