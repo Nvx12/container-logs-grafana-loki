@@ -17,3 +17,7 @@ scrape_configs:
   - job_name: 'loki'
     static_configs:
       - targets: ['loki:3100']
+  
+  - job_name: 'commercial_backend'
+    static_configs:
+      - targets: ['commercial_backend:4000']
