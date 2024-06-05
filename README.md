@@ -65,10 +65,7 @@ Create dashboards and panels to visualize your logs.
 <br/>
 ## Cleanup
 To stop and remove all the services, run:
-docker-compose down
-<br/>
-## To remove all the associated volumes:
-docker-compose down -v
+docker stack rm monitoring
 <br/>
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements.
