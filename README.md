@@ -43,29 +43,29 @@ Clone this repository to your local machine:
 
 git clone https://github.com/First-Delivery-Group/container-logs-grafana-loki.git
 cd container-logs-grafana-loki
-<br/>
+
 2. Configure Docker
 Ensure that Docker and Docker Compose are properly configured and running on your system.
-<br/>
+
 3. Start/Update Services
 Use Docker Compose to start Loki, Promtail, and Grafana:
-<br/>
+
 docker stack deploy -c docker-compose.yml monitoring
-<br/>
+
 5. Access Grafana
 Open your browser and go to http://localhost:3000.
 Default username: admin
 Default password: admin
 Upon first login, you will be prompted to change the password.
-<br/>
+
 ## Usage Start your Docker containers.
 Logs from the containers will be collected by Promtail and sent to Loki.
 In Grafana, add Loki as a data source
 Create dashboards and panels to visualize your logs.
-<br/>
+
 ## Cleanup
 To stop and remove all the services, run:
 docker stack rm monitoring
-<br/>
+
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements.
