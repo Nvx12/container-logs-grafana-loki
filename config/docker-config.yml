@@ -21,5 +21,9 @@ scrape_configs:
       - source_labels: ['__meta_docker_container_name']
         regex: '/(.*)'
         target_label: 'container_name'
+
       - source_labels: ['__meta_docker_container_id']
         target_label: 'container_id'
+
+      - source_labels: ['__meta_docker_container_label_com_docker_swarm_service_name']
+        target_label: 'swarm_service_name'

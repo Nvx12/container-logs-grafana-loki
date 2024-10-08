@@ -66,8 +66,6 @@ services:
         source: /var/run/docker.sock
         target: /var/run/docker.sock
     command: -config.file=/etc/promtail/docker-config.yml
-    depends_on:
-      - loki
     networks:
       - tun_prod
     deploy:
@@ -81,7 +79,10 @@ services:
   prometheus:
     image: prom/prometheus:latest
     ports:
-      - "9090:9090"
+      - target: 9090
+        published: 9090
+        protocol: tcp
+        mode: host
     volumes:
       - prom_data:/prometheus
       - type: bind
@@ -103,7 +104,10 @@ services:
   node-exporter:
     image: prom/node-exporter:latest
     ports:
-      - "9100:9100"
+      - target: 9100
+        published: 9100
+        protocol: tcp
+        mode: host
     networks:
       - tun_prod
     deploy:
@@ -120,7 +124,10 @@ services:
   cadvisor:
     image: google/cadvisor:latest
     ports:
-      - "8080:8080"
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: host
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
