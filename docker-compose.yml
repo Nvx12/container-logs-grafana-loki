@@ -1,8 +1,11 @@
-x-logging: &logging
-  logging:
-    driver: loki
-    options:
-      loki-url: "http://loki:3100/loki/api/v1/push"
+x-logging:
+  &default-logging
+  driver: "json-file"
+  options:
+    max-size: "1m"
+    max-file: "1"
+    tag: "{{.Name}}"
+
 services:
   grafana:
     image: grafana/grafana:10.0.3
@@ -32,6 +35,7 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
+    logging: *default-logging
 
   loki:
     image: grafana/loki:2.8.4
@@ -42,6 +46,8 @@ services:
         mode: host
     volumes:
       - loki-data:/loki
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
       - type: bind
         source: ./config/loki-config.yml
         target: /etc/loki/local-config.yml
@@ -51,11 +57,11 @@ services:
     deploy:
       replicas: 1
       restart_policy:
-        condition: any
+        condition: on-failure
         delay: 5s
         max_attempts: 3
         window: 120s
-
+    logging: *default-logging
   promtail:
     image: grafana/promtail:2.8.4
     volumes:
@@ -80,7 +86,7 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
-  
+    logging: *default-logging
   prometheus:
     image: prom/prometheus:latest
     ports:
@@ -89,9 +95,6 @@ services:
       - prom_data:/prometheus
       - type: bind
         source: ./config/prometheus.yml
-        target: /etc/prometheus/prometheus.yml
-    configs:
-      - source: prometheus_config
         target: /etc/prometheus/prometheus.yml
     networks:
       - tun_prod
@@ -102,6 +105,7 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
+    logging: *default-logging
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -119,6 +123,7 @@ services:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
       - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
+    logging: *default-logging
 
   cadvisor:
     image: google/cadvisor:latest
@@ -138,7 +143,7 @@ services:
         delay: 5s
         max_attempts: 3
         window: 120s
-
+    logging: *default-logging
 
 volumes:
   loki-data:

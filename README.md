@@ -34,6 +34,7 @@ The setup consists of three main components:
 - **Loki**: Log aggregation system.
 - **Promtail**: Agent that ships the logs to Loki.
 - **Grafana**: Visualization tool for querying and displaying the logs.
+- **Prometheus**: records metrics in a time series database built using an HTTP pull model, with flexible queries and real-time alerting.
 
 ## Setup
 
