@@ -90,10 +90,7 @@ services:
   prometheus:
     image: prom/prometheus:latest
     ports:
-      - target: 9090
-        published: 9090
-        protocol: tcp
-        mode: host
+      - "9090:9090"
     volumes:
       - prom_data:/prometheus
       - type: bind
@@ -113,10 +110,7 @@ services:
   node-exporter:
     image: prom/node-exporter:latest
     ports:
-      - target: 9100
-        published: 9100
-        protocol: tcp
-        mode: host
+      - "9100:9100"
     networks:
       - tun_prod
     deploy:
